@@ -97,10 +97,10 @@
 					</select>
 				</div>
 				<div class="col_3">
-					<label for="mactors">Actors <span>Clooney, George; Pitt, Brett</span></label>
-					<input id="mactors" name="actors" type="text" />
-					<label for="mdirector">Director <span>i.e. Soderbergh, Steven</span></label>
-					<input id="mactors" name="director" type="text" />
+					<label for="aname">Actor <span>Clooney, George</span></label>
+					<input id="aname" name="aname" type="text" />
+					<label for="dname">Director <span>Soderbergh, Steven</span></label>
+					<input id="dname" name="dname" type="text" />
 				</div>
 				<div class="col_3">
 					<label for="min_mratings">Minimum # of User Ratings <span>5000</span></label>
@@ -134,13 +134,21 @@
 	  	$con = mysql_connect($host,$user,$pass);
 	  	$dbs = mysql_select_db($databaseName, $con);
 
-	  	$sql = "SELECT * from Movies m ";
+	  	$sql = "SELECT m.title, m.myear from Movies m";
 
 	  	$keys = array_keys($_GET);
-	  	if(count($keys) > 0){
-	  		$sql .= "WHERE";
+	  	if(in_array("aname", $keys)){
+	  		$sql .= ", Actors a, Cast_Members c";
 	  	}
+	  	if(in_array("dname", $keys)){
+	  		$sql .= ", Directed dd, Directors ds";
+	  	}
+
 	  	$keysLeft = count($keys);
+	  	if($keysLeft > 0){
+	  		$sql .= " WHERE";
+	  	}
+	  	
 	  	foreach($keys as $key){
 	  		if(strcmp($key, "title") == 0){
 	  			$sql .= ' m.title LIKE "%' . $_GET[$key] . '%"';
@@ -151,12 +159,17 @@
 	  		if(strcmp($key, "mpaa_rating") == 0){
 	  			$sql .= ' m.mpaa_rating="' . $_GET[$key] . '"';
 	  		}
+	  		if(strcmp($key, "aname") == 0){
+	  			$sql .= ' c.title=m.title AND c.myear=m.myear AND c.aid=a.aid AND a.aname="' . $_GET[$key] . '"';
+	  		}
+	  		if(strcmp($key, "dname") == 0){
+	  			$sql .= ' dd.title=m.title AND dd.myear=m.myear AND dd.did=ds.did AND ds.dname="' . $_GET[$key] . '"';
+	  		}
 	  		$keysLeft--;
 	  		if($keysLeft > 0){
 	  			$sql .= ' AND';
 	  		}
 	  	}
-	  	$sql . ";";
 	  	echo $sql;
 	  	if(count($keys) > 0){
 	  		$result = mysql_query($sql);
