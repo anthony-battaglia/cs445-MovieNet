@@ -134,7 +134,7 @@
 	  	$con = mysql_connect($host,$user,$pass);
 	  	$dbs = mysql_select_db($databaseName, $con);
 
-	  	$sql = "SELECT m.title, m.myear from Movies m";
+	  	$sql = "SELECT m.title, m.myear, m.runtime from Movies m";
 
 	  	$keys = array_keys($_GET);
 	  	if(in_array("aname", $keys)){
@@ -142,6 +142,9 @@
 	  	}
 	  	if(in_array("dname", $keys)){
 	  		$sql .= ", Directed dd, Directors ds";
+	  	}
+	  	if(in_array("min_ratings", $keys)){
+	  		$sql .= ", Rated r";
 	  	}
 
 	  	$keysLeft = count($keys);
@@ -164,6 +167,9 @@
 	  		}
 	  		if(strcmp($key, "dname") == 0){
 	  			$sql .= ' dd.title=m.title AND dd.myear=m.myear AND dd.did=ds.did AND ds.dname="' . $_GET[$key] . '"';
+	  		}
+	  		if(strcmp($key, "min_ratings") == 0){
+	  			$sql .= ' r.title=m.title AND r.myear=m.myear GROUP BY r.title,r.myear HAVING COUNT(r.rating)>' . $_GET[$key];
 	  		}
 	  		$keysLeft--;
 	  		if($keysLeft > 0){
