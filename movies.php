@@ -82,6 +82,8 @@
 			<h4>Search</h4>
 			<form id="search" class="vertical" action="movies.php" method="GET">
 				<div class="col_3">
+					<input type="checkbox" id="prefix" name="prefix" />
+					<label for="prefix" class="inline"><span>Starts With</span></label>
 					<label for="title">Title <span>Ocean's Eleven</span></label>
 					<input id="title" name="title" type="text" />
 					<label for="myear">Year <span>2001</span></label>
@@ -154,7 +156,11 @@
 	  	
 	  	foreach($keys as $key){
 	  		if(strcmp($key, "title") == 0){
-	  			$sql .= ' m.title LIKE "%' . $_GET[$key] . '%"';
+	  			$sql .= ' m.title LIKE "';
+	  			if(!in_array("prefix", $keys)){
+	  				$sql .= '%';
+	  			}
+	  			$sql .= $_GET[$key] . '%"';
 	  		}
 	  		if(strcmp($key, "myear") == 0){
 	  			$sql .= ' m.myear=' . $_GET[$key];
@@ -172,11 +178,11 @@
 	  			$sql .= ' r.title=m.title AND r.myear=m.myear GROUP BY r.title,r.myear HAVING COUNT(r.rating)>' . $_GET[$key];
 	  		}
 	  		$keysLeft--;
-	  		if($keysLeft > 0){
+	  		if($keysLeft > 0 && strcmp($key, "prefix") != 0){
 	  			$sql .= ' AND';
 	  		}
 	  	}
-	  	// echo $sql;
+	  	echo $sql;
 	  	if(count($keys) > 0){
 	  		$result = mysql_query($sql);
 		  	$data = array();
@@ -184,7 +190,8 @@
 			  $data[] = $row;
 			}
 			echo "<hr />";
-			echo "<table class='sortable' cellspacing='0' cellpadding='0'>";
+			echo "<h4>" . count($data) . " Movies</h4>";
+			echo "<table class='sortable striped' cellspacing='0' cellpadding='0'>";
 			echo "<thead>";
 			echo "<tr>";
 			echo "<th>Title</th>";
