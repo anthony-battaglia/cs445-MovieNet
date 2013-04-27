@@ -27,7 +27,7 @@
 	</ul>
 
 	<div class="grid">
-		<div class="col_12">
+		<!-- <div class="col_12">
 			<h6>Most Popular</h6>
 			<div class="col_1">
 				<img title="Argo (2012)" src="/www/cs445_4_s13/imgs/argo.jpg" width="150" height="300" />
@@ -77,7 +77,7 @@
 
 			<hr />
 
-		</div>
+		</div> -->
 		<div class="col_12">
 			<h4>Search</h4>
 			<form id="search" class="vertical" action="movies.php" method="GET">
@@ -176,17 +176,34 @@
 	  			$sql .= ' AND';
 	  		}
 	  	}
-	  	echo $sql;
+	  	// echo $sql;
 	  	if(count($keys) > 0){
 	  		$result = mysql_query($sql);
 		  	$data = array();
 			while ($row = mysql_fetch_assoc($result)){
 			  $data[] = $row;
 			}
-			echo json_encode($data);
+			echo "<hr />";
+			echo "<table class='sortable' cellspacing='0' cellpadding='0'>";
+			echo "<thead>";
+			echo "<tr>";
+			echo "<th>Title</th>";
+					echo "<th>Year</th>";
+					echo "<th>Runtime (mins)</th>";
+				echo "</tr>";
+			echo "</thead>";
+			echo "<tbody>";
+			foreach ($data as $key => $value) {
+ 				echo "<tr>";
+					echo "<td>" . $value["title"] . "</td>";
+					echo "<td>" . $value["myear"] . "</td>";
+					echo "<td>" . ($value["runtime"] ? $value["runtime"] : "--") . "</td>";
+				echo "</tr>";
+ 			}
+			echo "</tbody>";
+			echo "</table>";
 		}
 		?>
-
 	</div><!-- END GRID -->
 
 <!-- ===================================== START FOOTER ===================================== -->
