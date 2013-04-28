@@ -127,6 +127,9 @@
 		<div class="col_2">
 			<button form="search" type="submit" class="blue"><i class="icon-search"></i>Search</button>
 		</div>
+		<div style="display: none;" class="notice error"><i class="icon-remove-sign icon-large"></i> This is an Error Notice 
+			<a href="#close" class="icon-remove"></a>
+		</div>
 		<?php
 		$host = "cs445sql";
 		$user = "atbattag";
@@ -203,7 +206,9 @@
 	  			array_push($where, "m.myear=" . $_GET[$key]);
 	  		}
 	  		if(strcmp($key, "mpaa_rating") == 0){
-	  			array_push($where, 'm.mpaa_rating="' . $_GET[$key] . '"');
+	  			if(is_numeric($_GET[$key])){
+	  				array_push($where, 'm.mpaa_rating="' . $_GET[$key] . '"');
+	  			}
 	  		}
 	  		if(strcmp($key, "aname") == 0){
 	  			array_push($where, 'c.title=m.title AND c.myear=m.myear AND c.aid=a.aid AND a.aname="' . $_GET[$key] . '"');
@@ -212,7 +217,9 @@
 	  			array_push($where, 'dd.title=m.title AND dd.myear=m.myear AND dd.did=ds.did AND ds.dname="' . $_GET[$key] . '"');
 	  		}
 	  		if(strcmp($key, "min_ratings") == 0){
-	  			array_push($where, 'r.title=m.title AND r.myear=m.myear GROUP BY r.title,r.myear HAVING COUNT(r.rating)>' . $_GET[$key]);
+	  			if(is_numeric($_GET[$key])){
+	  				array_push($where, 'r.title=m.title AND r.myear=m.myear GROUP BY r.title,r.myear HAVING COUNT(r.rating)>' . $_GET[$key]);
+	  			}
 	  		}
 	  	}
 	  	if($keyCount > 0){
