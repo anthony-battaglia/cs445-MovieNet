@@ -130,7 +130,7 @@
 		<?php
 		$host = "cs445sql";
 		$user = "atbattag";
-		$pass = "EL807atb";
+		$pass = "insert-edlab-password";
 
 		$databaseName = "bss";
 	  	$con = mysql_connect($host,$user,$pass);
