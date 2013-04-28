@@ -232,7 +232,7 @@
 				$keys = array_keys($value);
 				echo "<tr>";
 				foreach($keys as $attr){
-					if(is_null($value[$attr])){
+					if(strlen($value[$attr]) == 0){
 						echo "<td>--</td>";
 					}
 					else{
