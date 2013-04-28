@@ -21,8 +21,8 @@
 		</li>
 		<li class="divider"></li>
 		<li><a href="home.php"><i class="icon-home"></i> Home</a></li>
-		<li class="current"><a href=""><i class="icon-facetime-video"></i> Movies</a></li>
-		<li><a href="castmembers.php"><i class="icon-group"></i> Cast Members</a></li>
+		<li><a href=""><i class="icon-facetime-video"></i> Movies</a></li>
+		<li class="current"><a href="castmembers.php"><i class="icon-group"></i> Cast Members</a></li>
 		<li><a href="users.php"><i class="icon-thumbs-up"></i> Users</a></li>
 	</ul>
 
