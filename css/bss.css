@@ -2,3 +2,11 @@
 margin-left: 40%;
 }
 
+a{
+	text-decoration: none;
+}
+
+a:hover{
+	text-decoration: underline;
+}
+

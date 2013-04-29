@@ -192,7 +192,10 @@
 						echo "<td>--</td>";
 					}
 					else{
-						echo "<td>" . $value[$attr] . "</td>";
+						if(strcmp("Year", $attr) == 0 || strcmp("Runtime", $attr) == 0 || strcmp("MPAA", $attr) == 0 || strcmp("Role", $attr) == 0){
+							echo "<td>" . $value[$attr] . "</td>";
+						}
+						else echo '<td><a href="/php-wrapper/cs445_4_s13/movie.php?title=' . $value["Title"] . '&myear=' . $value["Year"] . '">' . $value[$attr] . "</a></td>";
 					}
 				}
 				echo "</tr>";
@@ -203,26 +206,22 @@
 		?>
 		<hr />
 		<div class="col_12">
-			<h4>Top 5</h4>
+			<h4>Top 5 Rated</h4>
 			<?php
-				$host = "cs445sql";
-				$user = "atbattag";
-				$pass = "insert-edlab-password";
-
-				$databaseName = "bss";
-	  			$con = mysql_connect($host,$user,$pass);
-	  			$dbs = mysql_select_db($databaseName, $con);
-
 	  			$result = mysql_query("SELECT R.title, R.myear, AVG(R.rating) AS avg_rating FROM Rated R GROUP BY R.title, R.myear HAVING COUNT(R.rating)>1000 ORDER BY avg_rating desc LIMIT 5");
-	  			$data = array();
+	  			$top5 = array();
+	  			$topMovies = array();
 				while ($row = mysql_fetch_assoc($result)){
-			  		$data[] = json_decode(file_get_contents("http://api.rottentomatoes.com/api/public/v1.0/movies.json?apikey=zmrwsazsgjur8vmd5qdafz8e&q=" . urlencode($row["title"]) . "&page_limit=1"), true);
+					$topMovies[] = $row;
+			  		$top5[] = json_decode(file_get_contents("http://api.rottentomatoes.com/api/public/v1.0/movies.json?apikey=zmrwsazsgjur8vmd5qdafz8e&q=" . urlencode($row["title"]) . "&page_limit=1"), true);
 				}
-				foreach($data as $key => $movie){
-					$title = $movie["movies"][0]["title"];
-					$imgsrc = $movie["movies"][0]["posters"]["detailed"];
+				foreach($topMovies as $key => $movie){
+					$title = $movie["title"];
+					$year = $movie["myear"];
+					$rmovie = json_decode(file_get_contents("http://api.rottentomatoes.com/api/public/v1.0/movies.json?apikey=zmrwsazsgjur8vmd5qdafz8e&q=" . urlencode($title) . "&page_limit=1"), true);
+					$imgsrc = $rmovie["movies"][0]["posters"]["detailed"];
 					echo '<div class="col_2">';
-					echo '<a href=""> <img title="' . $title . '" src="' . $imgsrc . '" /></a>';
+					echo '<a href="/php-wrapper/cs445_4_s13/movie.php?title=' . urlencode($title) . "&myear=" . $year .  '"> <img title="' . $title . '" src="' . $imgsrc . '" /></a>';
 					echo '<small>' . $title . '</small>';
 					echo '</div>';
 				}
