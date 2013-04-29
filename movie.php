@@ -8,6 +8,7 @@
 	<link rel="stylesheet" type="text/css" href="/www/cs445_4_s13/css/kickstart.css" media="all" />
 	<link rel="stylesheet" type="text/css" href="/www/cs445_4_s13/css/style.css" media="all" />
 	<link rel="stylesheet" type="text/css" href="/www/cs445_4_s13/css/bss.css" media="all" />
+	<style>img{border: 1px solid #8f8f8f;}</style>
 </head>
 
 <body>
@@ -68,7 +69,7 @@
 				?>
 			</div>
 			<div class="col_7">
-				<div class="notice success clearfix" style="background: #ffffff; color: #000000;">
+				<div class="notice success clearfix" style="background: #ffffff; color: #000000; border-color: #8f8f8f;">
 				<h4><?php echo $_GET["title"] . " (" . $_GET["myear"] . ")"  ?></h4>
 				<em>Avg Rating: <strong><?php echo $avg["avg"] ?></strong> (<?php echo $avg["num_ratings"] ?>)  </em><a href="">Rate</a>
 				<p>
