@@ -8,6 +8,7 @@
 	<link rel="stylesheet" type="text/css" href="/www/cs445_4_s13/css/kickstart.css" media="all" />
 	<link rel="stylesheet" type="text/css" href="/www/cs445_4_s13/css/style.css" media="all" />
 	<link rel="stylesheet" type="text/css" href="/www/cs445_4_s13/css/bss.css" media="all" />
+	<link rel="stylesheet" type="text/css" href="/www/cs445_4_s13/bss2.css" media="all" />
 	<script src="/www/cs445_4_s13/bss2.js"></script>
 	<style>img{border: 1px solid #8f8f8f;}</style>
 </head>
@@ -89,7 +90,7 @@
 					?></small></h6>
 				</div>
 			</div>
-			<div class="col_9">
+			<div class="col_3">
 				<?php
 				if (isset($theMovie)){
 					$ad = mysql_query('SELECT A.ad, A.link FROM Advertises A WHERE A.title="' . urldecode($title) . '" and A.myear=' . $_GET["myear"] . ' order by RAND() limit 0,1');
