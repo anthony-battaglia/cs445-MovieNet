@@ -27,57 +27,6 @@
 	</ul>
 
 	<div class="grid">
-		<!-- <div class="col_12">
-			<h6>Most Popular</h6>
-			<div class="col_1">
-				<img title="Argo (2012)" src="/www/cs445_4_s13/imgs/argo.jpg" width="150" height="300" />
-			</div>
-		
-			<div class="col_1">
-				<img title="Life of Pi (2012)" src="/www/cs445_4_s13/imgs/life_of_pi.jpg" width="150" height="300" />
-			</div>
-			
-			<div class="col_1">
-				<img title="Zero Dark Thirty (2012)" src="/www/cs445_4_s13/imgs/zero_dark_thirty.jpg" width="150" height="300" />
-			</div>
-
-			<div class="col_1">
-				<img title="The Dark Knight Rises (2012)" src="/www/cs445_4_s13/imgs/dark_knight_rises.jpg" wwidth="150" height="300" />
-			</div>
-			<div class="col_1">
-				<img title="Argo (2012)" src="/www/cs445_4_s13/imgs/argo.jpg" width="150" height="300" />
-			</div>
-		
-			<div class="col_1">
-				<img title="Life of Pi (2012)" src="/www/cs445_4_s13/imgs/life_of_pi.jpg" width="150" height="300" />
-			</div>
-			
-			<div class="col_1">
-				<img title="Zero Dark Thirty (2012)" src="/www/cs445_4_s13/imgs/zero_dark_thirty.jpg" width="150" height="300" />
-			</div>
-
-			<div class="col_1">
-				<img title="The Dark Knight Rises (2012)" src="/www/cs445_4_s13/imgs/dark_knight_rises.jpg" wwidth="150" height="300" />
-			</div>
-			<div class="col_1">
-				<img title="Argo (2012)" src="/www/cs445_4_s13/imgs/argo.jpg" width="150" height="300" />
-			</div>
-		
-			<div class="col_1">
-				<img title="Life of Pi (2012)" src="/www/cs445_4_s13/imgs/life_of_pi.jpg" width="150" height="300" />
-			</div>
-			
-			<div class="col_1">
-				<img title="Zero Dark Thirty (2012)" src="/www/cs445_4_s13/imgs/zero_dark_thirty.jpg" width="150" height="300" />
-			</div>
-
-			<div class="col_1">
-				<img title="The Dark Knight Rises (2012)" src="/www/cs445_4_s13/imgs/dark_knight_rises.jpg" wwidth="150" height="300" />
-			</div>
-
-			<hr />
-
-		</div> -->
 		<div class="col_12">
 			<h4>Search</h4>
 			<form id="search" class="vertical" action="movies.php" method="GET">
@@ -141,7 +90,7 @@
 
 	  	// $sql = "SELECT m.title, m.myear, m.runtime FROM Movies m";
 
-	  	$select = array("m.title", "m.myear", "m.runtime, m.mpaa_rating");
+	  	$select = array("m.title as Title", "m.myear as Year", "m.runtime as Runtime, m.mpaa_rating as MPAA");
 	  	$from = array("Movies m");
 	  	$where = array();
 
@@ -181,15 +130,15 @@
 
 	  	$keys = array_keys($_GET);
 	  	if(in_array("aname", $keys)){
-	  		array_push($select, "a.aname", "c.role");
+	  		array_push($select, "a.aname AS Actor", "c.role AS Role");
 	  		array_push($from, "Actors a, Cast_Members c");
 	  	}
 	  	if(in_array("dname", $keys)){
-	  		array_push($select, "ds.dname");
+	  		array_push($select, "ds.dname AS Director");
 	  		array_push($from, "Directors ds", "Directed dd");
 	  	}
 	  	if(in_array("min_ratings", $keys)){
-	  		array_push($select, "COUNT(r.rating)");
+	  		array_push($select, "COUNT(r.rating) AS '# of Ratings'");
 	  		array_push($from, "Rated r");
 	  	}
 
@@ -252,6 +201,35 @@
 			echo "</table>";
 		}
 		?>
+		<hr />
+		<div class="col_12">
+			<h4>Top 5</h4>
+			<?php
+				$host = "cs445sql";
+				$user = "atbattag";
+				$pass = "insert-edlab-password";
+
+				$databaseName = "bss";
+	  			$con = mysql_connect($host,$user,$pass);
+	  			$dbs = mysql_select_db($databaseName, $con);
+
+	  			$result = mysql_query("SELECT R.title, R.myear, AVG(R.rating) AS avg_rating FROM Rated R GROUP BY R.title, R.myear HAVING COUNT(R.rating)>1000 ORDER BY avg_rating desc LIMIT 5");
+	  			$data = array();
+				while ($row = mysql_fetch_assoc($result)){
+			  		$data[] = json_decode(file_get_contents("http://api.rottentomatoes.com/api/public/v1.0/movies.json?apikey=zmrwsazsgjur8vmd5qdafz8e&q=" . urlencode($row["title"]) . "&page_limit=1"), true);
+				}
+				foreach($data as $key => $movie){
+					$title = $movie["movies"][0]["title"];
+					$imgsrc = $movie["movies"][0]["posters"]["detailed"];
+					echo '<div class="col_2">';
+					echo '<a href=""> <img title="' . $title . '" src="' . $imgsrc . '" /></a>';
+					echo '<small>' . $title . '</small>';
+					echo '</div>';
+				}
+	  		?>
+						
+			</div>
+		</div>
 	</div><!-- END GRID -->
 
 <!-- ===================================== START FOOTER ===================================== -->
