@@ -8,6 +8,7 @@
 	<link rel="stylesheet" type="text/css" href="/www/cs445_4_s13/css/kickstart.css" media="all" />
 	<link rel="stylesheet" type="text/css" href="/www/cs445_4_s13/css/style.css" media="all" />
 	<link rel="stylesheet" type="text/css" href="/www/cs445_4_s13/css/bss.css" media="all" />
+	<script src="/www/cs445_4_s13/bss2.js"></script>
 	<style>img{border: 1px solid #8f8f8f;}</style>
 </head>
 
@@ -33,8 +34,8 @@
 			<div class="col_2">
 				<?php
 					$host = "cs445sql";
-					$user = "atbattag";
-					$pass = "insert-edlab-password";
+					$user = "bstaplet";
+					$pass = "EL424bst";
 
 					$databaseName = "bss";
 				  	$con = mysql_connect($host,$user,$pass);
@@ -91,10 +92,11 @@
 			<div class="col_9">
 				<?php
 				if (isset($theMovie)){
-					$ad = mysql_fetch_assoc(mysql_query('SELECT A.ad, A.link FROM Advertises A WHERE A.title=' . urldecode($title) . ' and A.myear=' . $_GET["myear"] . ' order by RAND() limit 0,1'));
-					while ($row = mysql_fetch_assoc($ad)){
-			  			echo '<img src=' . $row[0] . ' onclick="adClicked(' . $row[1] . ')" />';
-					}
+					$ad = mysql_query('SELECT A.ad, A.link FROM Advertises A WHERE A.title="' . urldecode($title) . '" and A.myear=' . $_GET["myear"] . ' order by RAND() limit 0,1');
+					if ($ad){
+						$row = mysql_fetch_assoc($ad);
+			  			echo '<img src=' . $row["ad"] . ' onclick="adClicked(\'' . $row["link"] . '\')" max-height="200px" max-width="200px" id="ad"/>';
+			  		}
 				}
 				?>
 			</div>
