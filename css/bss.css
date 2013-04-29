@@ -10,3 +10,11 @@ a:hover{
 	text-decoration: underline;
 }
 
+#ad {
+	max-width: 200px;
+	max-height: 200px;
+}
+
+#ad:hover{
+	cursor: pointer;
+}
