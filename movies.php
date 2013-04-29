@@ -7,6 +7,7 @@
 	<meta name="description" content="CS445 Movie Database Class Project" />
 	<link rel="stylesheet" type="text/css" href="/www/cs445_4_s13/css/kickstart.css" media="all" />
 	<link rel="stylesheet" type="text/css" href="/www/cs445_4_s13/css/style.css" media="all" />
+	<link rel="stylesheet" type="text/css" href="/www/cs445_4_s13/css/bss.css" media="all" />
 </head>
 
 <body>
