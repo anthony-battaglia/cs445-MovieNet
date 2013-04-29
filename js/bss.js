@@ -12,3 +12,8 @@ $('#search').submit(function(e){
 	}
 	return true;
 });
+
+function adClicked(link){
+	// TODO increment the count
+	window.location.href(link);
+};

@@ -88,6 +88,16 @@
 					?></small></h6>
 				</div>
 			</div>
+			<div class="col_9">
+				<?php
+				if (isset($theMovie)){
+					$ad = mysql_fetch_assoc(mysql_query('SELECT A.ad, A.link FROM Advertises A WHERE A.title=' . urldecode($title) . ' and A.myear=' . $_GET["myear"] . ' order by RAND() limit 0,1'));
+					while ($row = mysql_fetch_assoc($ad)){
+			  			echo '<img src=' . $row[0] . ' onclick="adClicked(' . $row[1] . ')" />';
+					}
+				}
+				?>
+			</div>
 		</div>
 		<div class="col_12">
 			<div class="col_8">
