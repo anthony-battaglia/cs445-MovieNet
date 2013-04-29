@@ -95,8 +95,9 @@
 				if (isset($theMovie)){
 					$ad = mysql_query('SELECT A.ad, A.link FROM Advertises A WHERE A.title="' . urldecode($title) . '" and A.myear=' . $_GET["myear"] . ' order by RAND() limit 0,1');
 					if ($ad){
-						$row = mysql_fetch_assoc($ad);
-			  			echo '<img src=' . $row["ad"] . ' onclick="adClicked(\'' . $row["link"] . '\')" max-height="200px" max-width="200px" id="ad"/>';
+						while ($row = mysql_fetch_assoc($ad)){
+			  				echo '<img src=' . $row["ad"] . ' onclick="adClicked(\'' . $row["link"] . '\')" max-height="200px" max-width="200px" id="ad"/>';
+			  			}
 			  		}
 				}
 				?>
