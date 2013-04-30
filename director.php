@@ -68,7 +68,7 @@
 					  $data[] = $row;
 					}
 					echo "<h4>" . $dname . "</h4>";
-					echo "<p><i>Directed <strong>" . count($data) . "</strong> productions</i></p>"
+					echo "<p><i>Directed <strong>" . count($data) . "</strong> movies</i></p>"
 					?>
 					<!-- <span><strong>Director:</strong> <a href=""><?php echo $cast[0]["dname"] ?></a></span> -->
 				</div>
@@ -76,25 +76,45 @@
 		</div>
 		<div class="col_12">
 			<div class="col_8">
-				<table cellspacing="0" cellpadding="0">
-				<thead><tr>
 					<?php 
 					echo "<h4>" . count($data) . " Productions</h4>";
 					if(isset($data[0])){
 						init_table($data[0]);
 					}
 					?>
-				</tr></thead>
-				<tbody>
 					<?php
 						foreach($data as $movie){
 							echo "<tr>";
-							echo '<td><a href="movie.php?title=' . $movie["Title"] . '&myear=' . $movie["Year"] . '">' . $movie["Title"] . "</a></td>";
+							echo '<td><a href="movie.php?title=' . urlencode($movie["Title"]) . '&myear=' . $movie["Year"] . '">' . $movie["Title"] . "</a></td>";
 							echo '<td>' . $movie["Year"] . "</td>";
 							echo '<td>' . $movie["MPAA"] . "</td>";
 							echo '<td>' . $movie["Runtime"] . "</td>";
 							echo "</tr>";
 						}
+					?>
+				</tbody>
+				</table>
+			</div>
+			<hr />
+			<div class="col_8">
+					<?php
+					$csql = 'SELECT DISTINCT a.aname as Name, dd.title AS Title, dd.myear AS Year FROM Directed dd, Directors ds, Cast_Members c, Actors a WHERE dd.did=ds.did AND c.title=dd.title AND c.myear=dd.myear AND c.aid=a.aid AND ds.dname="' . urldecode($dname) . '"';
+					$result = mysql_query($csql);
+				  	$cast = array();
+					while ($row = mysql_fetch_assoc($result)){
+					  $cast[] = $row;
+					}
+					if(isset($cast[0])){
+						init_table($cast[0]);
+					}
+					echo '<h4>' . count($cast) . ' Cast Members appearing in at least one movie</h4>';
+					foreach($cast as $actor){
+						echo "<tr>";
+						echo '<td><a href="actor.php?name=' . urlencode($actor["Name"]) . '">' . $actor["Name"] . "</a></td>";
+						echo '<td><a href="movie.php?title=' . urlencode($actor["Title"]) . '&myear=' . $actor["Year"] . '">' . $actor["Title"] . "</a></td>";
+						echo '<td>' . $actor["Year"] . "</td>";
+						echo "</tr>";
+					}
 					?>
 				</tbody>
 				</table>

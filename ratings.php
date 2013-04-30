@@ -12,7 +12,6 @@
 	<script src="/www/cs445_4_s13/bss2.js"></script>
 	<style>img{border: 1px solid #8f8f8f;}</style>
 </head>
-
 <body>
 	<!-- Menu Horizontal -->
 	<ul class="menu">
@@ -30,6 +29,7 @@
 		<li><a href="users.php"><i class="icon-thumbs-up"></i> Users</a></li>
 	</ul>
 
+	<!-- START GRID -->
 	<div class="grid">
 		<div class="col_12">
 			<div class="col_2">
@@ -44,7 +44,7 @@
 
 				  	$title = $_GET["title"];
 				  	$year = $_GET["myear"];
-				  	$sql = 'SELECT a.aname AS aname, c.role AS role, m.myear AS myear, ds.dname as dname FROM Movies m, Cast_Members c, Actors a, Directors ds, Directed dd WHERE m.title=c.title AND m.myear=c.myear AND c.aid=a.aid AND ds.did=dd.did AND dd.title=m.title AND dd.myear=m.myear AND m.myear=' . $year .  ' AND m.title="' . urldecode($title) . '"' ;
+				  	$sql = 'SELECT a.aname AS aname, c.role AS role, m.myear AS myear, ds.dname as dname FROM Movies m, Cast_Members c, Actors a, Directors ds, Directed dd WHERE m.title=c.title AND m.myear=c.myear AND c.aid=a.aid AND ds.did=dd.did AND dd.title=m.title AND dd.myear=m.myear AND m.title="' . urldecode($title) . '"';
 				  	$result = mysql_query($sql);
 
 				  	$cast = array();
@@ -76,9 +76,9 @@
 				<h4><?php echo $_GET["title"] . " (" . $_GET["myear"] . ")"  ?></h4>
 				<em>Avg Rating: <strong><?php echo $avg["avg"] ?></strong> (<?php echo $avg["num_ratings"] ?>)  </em><a href="">Rate</a>
 				<p>
-					<em><?php echo (isset($theMovie["critics_consensus"])) ? $theMovie["critics_consensus"] : "No description found."; ?></em>
+					<em><?php echo (isset($theMovie)) ? $theMovie["critics_consensus"] : "No description found."; ?></em>
 				</p>
-				<span><strong>Director:</strong> <?php echo isset($cast[0]) ? '<a href="director.php?name=' . $cast[0]["dname"] . '"">' . $cast[0]["dname"] . '</a></span>' : "Unknown"; ?>
+				<span><strong>Director:</strong> <a href=""><?php echo $cast[0]["dname"] ?></a></span>
 				<?php
 				if(isset($theMovie)){
 					echo "<h6><small><strong>Starring: </strong>";
@@ -106,35 +106,35 @@
 			</div>
 		</div>
 		<div class="col_12">
-			<div class="col_8">
-				<h5>Cast</h5>
-				<table cellspacing="0" cellpadding="0">
-				<thead><tr>
-					<th>Actor</th>
-					<th>Role</th>
-				</tr></thead>
-				<tbody>
-					<?php 
-						foreach($cast as $actor){
-							echo "<tr>";
-							echo '<td><a href="actor.php?name=' . urlencode($actor["aname"]) . '">' . $actor["aname"] . "</a></td>";
-							echo "<td>" . $actor["role"] . "</td>";
-							echo "</tr>";
-						}
-					?>
-				</tbody>
-				</table>
+			<div class="col_3">
+					<label for="user_rating">Rating (From 1 to 10) <span></span></label>
+					<select id="user_rating" name="user_rating">
+						<option value="">--</option>
+						<option value="1">1</option>
+						<option value="2">2</option>
+						<option value="3">3</option>
+						<option value="4">4</option>
+						<option value="5">5</option>
+						<option value="6">6</option>
+						<option value="7">7</option>
+						<option value="8">8</option>
+						<option value="9">9</option>
+						<option value="10">10</option>
+					</select>
+			</div>
+		</div>
+		<div class="col_12">
+			<div class="col_9">
+				<!-- Reviex Box -->
+				<label for="user_review">Review <span></span></label>
+				<textarea id="user_review" placeholder="Enter you own movie review here"></textarea>
 			</div>
 		</div>
 	</div>
+	<!-- END GRID -->
 
 	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 	<script type="text/javascript" src="/www/cs445_4_s13/js/kickstart.js"></script>    
 	<script type="text/javascript" src="/www/cs445_4_s13/js/bss.js"></script> 
-	<?php
-		if ($_SERVER['REQUEST_METHOD'] === 'POST' && $advertiser){
-			$update = mysql_query('UPDATE Advertisers A SET A.clicks=A.clicks+1 WHERE A.ccnum=' . $advertiser["ccnum"]);
-		}
-	?>
 </body>
 </html>

@@ -6,3 +6,7 @@
 #ad:hover{
 	cursor: pointer;
 }
+
+#user_review{
+	width: 80%;
+}

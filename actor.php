@@ -68,7 +68,7 @@
 					  $data[] = $row;
 					}
 					echo "<h4>" . $aname . "</h4>";
-					echo "<p><i>Appears in <strong>" . count($data) . "</strong> productions</i></p>"
+					echo "<p><i>Appears in <strong>" . count($data) . "</strong> movies</i></p>"
 					?>
 					<!-- <span><strong>Director:</strong> <a href=""><?php echo $cast[0]["dname"] ?></a></span> -->
 				</div>
