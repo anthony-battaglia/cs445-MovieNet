@@ -156,9 +156,7 @@
 	  			array_push($where, "m.myear=" . $_GET[$key]);
 	  		}
 	  		if(strcmp($key, "mpaa_rating") == 0){
-	  			if(is_numeric($_GET[$key])){
-	  				array_push($where, 'm.mpaa_rating="' . $_GET[$key] . '"');
-	  			}
+	  			array_push($where, 'm.mpaa_rating="' . $_GET[$key] . '"');
 	  		}
 	  		if(strcmp($key, "aname") == 0){
 	  			array_push($where, 'c.title=m.title AND c.myear=m.myear AND c.aid=a.aid AND a.aname="' . $_GET[$key] . '"');
