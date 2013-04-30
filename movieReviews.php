@@ -9,11 +9,10 @@
 	<link rel="stylesheet" type="text/css" href="/www/cs445_4_s13/css/style.css" media="all" />
 	<link rel="stylesheet" type="text/css" href="/www/cs445_4_s13/css/bss.css" media="all" />
 	<link rel="stylesheet" type="text/css" href="/www/cs445_4_s13/bss2.css" media="all" />
-	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-	<script type="text/javascript" src="/www/cs445_4_s13/jquery-cookie/jquery.cookie.js"></script>
 	<script src="/www/cs445_4_s13/bss2.js"></script>
 	<style>img{border: 1px solid #8f8f8f;}</style>
 </head>
+
 <body>
 	<!-- Menu Horizontal -->
 	<ul class="menu">
@@ -33,7 +32,6 @@
 		<li><?php echo '<a href="userss.php?uname='.urlencode($uname).'"' ?>><i class="icon-thumbs-up"></i> Users</a></li>
 	</ul>
 
-	<!-- START GRID -->
 	<div class="grid">
 		<div class="col_12">
 			<div class="col_2">
@@ -72,13 +70,21 @@
 						}
 						$imgsrc = (isset($theMovie)) ? $theMovie["posters"]["detailed"] : "/www/cs445_4_s13/imgs/poster_default.gif";
 					}
-					echo '<img title="' . $title . '" src="' . $imgsrc . '" />'
+					echo '<img title="' . $title . '" src="' . $imgsrc . '" />';
+
+					$sql = 'SELECT u.uname AS uname, r.rating AS rating, r.review AS review FROM Users u, Rated r WHERE u.email = r.email AND r.title="' . urldecode($title) . '" AND r.myear="' . $year . '" AND r.review IS NOT NULL';
+				  	$result = mysql_query($sql);
+
+				  	$reviews = array();
+				  	while ($row = mysql_fetch_assoc($result)){
+			  			$reviews[] = $row;
+					}
 				?>
 			</div>
 			<div class="col_7">
 				<div class="notice success clearfix" style="background: #ffffff; color: #000000; border-color: #8f8f8f;">
 				<h4><?php echo $_GET["title"] . " (" . $_GET["myear"] . ")"  ?></h4>
-				<em>Avg Rating: <strong><?php echo $avg["avg"] ?></strong> (<?php echo $avg["num_ratings"] ?>)  </em><a href="">Rate</a>
+				<em>Avg Rating: <strong><?php echo $avg["avg"] ?></strong> (<?php echo $avg["num_ratings"] ?>)  </em><a href=<?php echo "/php-wrapper/cs445_4_s13/ratings.php?title=" . urlencode($title) . "&myear=" . $_GET['myear'] ?>>Rate</a>
 				<p>
 					<em><?php echo (isset($theMovie)) ? $theMovie["critics_consensus"] : "No description found."; ?></em>
 				</p>
@@ -111,45 +117,31 @@
 			</div>
 		</div>
 		<div class="col_12">
-			<div class="col_3">
-					<label for="user_rating">Rating (From 1 to 10) <span></span></label><br/>
-					<select id="user_rating" name="user_rating">
-						<option value="">--</option>
-						<option value="1">1</option>
-						<option value="2">2</option>
-						<option value="3">3</option>
-						<option value="4">4</option>
-						<option value="5">5</option>
-						<option value="6">6</option>
-						<option value="7">7</option>
-						<option value="8">8</option>
-						<option value="9">9</option>
-						<option value="10">10</option>
-					</select>
+			<div class="col_8">
+				<h5>Reviews</h5>
+				<table cellspacing="0" cellpadding="0">
+				<thead><tr>
+					<th>User</th>
+					<th>Rating</th>
+					<th>Review</th>
+				</tr></thead>
+				<tbody>
+					<?php 
+						foreach($reviews as $review){
+							echo "<tr>";
+							echo '<td><a href="">' . $review["uname"] . "</a></td>";
+							echo '<td>' . $review["rating"] . '</td>';
+							echo "<td>" . $review["review"] . "</td>";
+							echo "</tr>";
+						}
+					?>
+				</tbody>
+				</table>
 			</div>
 		</div>
-		<div class="col_12">
-			<div class="col_9">
-				<!-- Reviex Box -->
-				<label for="user_review">Review <span id="counter"></span></label><br/>
-				<textarea id="user_review" placeholder="Enter you own movie review here"></textarea>
-				<div class="notice success" id="review_success" style="display: none;"><i class="icon-ok icon-large"></i> Rating Successful! 
-					<a href="#close" class="icon-remove"></a>
-				</div>
-			</div>
-		</div>
-		<div class="col_2">
-			<?php
-			echo '<button form="rating_submit" type="submit" class="blue" onclick="submitRating(' . '\'' . urldecode($title) . '\', \'' . $_GET["myear"] . '\')"><i class="icon-comment"</i>Submit</button>';
-			?>
-		</div>
-	</div>
-	<!-- END GRID -->
-	<div class="clear"></div>
-	<div id="footer">
-	&copy; UMass Amherst CS445 S13 Movie Database Class Project. This website was built with <a href="http://www.99lime.com">HTML KickStart</a>
 	</div>
 
+	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 	<script type="text/javascript" src="/www/cs445_4_s13/js/kickstart.js"></script>    
 	<script type="text/javascript" src="/www/cs445_4_s13/js/bss.js"></script> 
 </body>

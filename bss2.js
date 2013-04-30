@@ -10,3 +10,25 @@ function adClicked(link, ccnum){
 	request.send();
 	// window.location.href=link;
 };
+
+function submitRating (title, myear){
+	var rating = $("#user_rating").val();
+	var review = $("#user_review").val();
+	var email = $.cookie('email');
+	var postData = { title : title, myear : myear, email : email, rating : rating };
+	if (review !== undefined && review !== null && review !== "")
+		postData.review = review;
+
+	$.ajax({
+			type : 'POST',
+			url  : 'submitRating.php',
+			data : postData,
+			dataType : 'json'
+		}).done(ratingCallback);
+};
+
+function ratingCallback (response){
+	$("#user_rating").val("--");
+	$("#user_review").val("");
+	alert(response);
+};

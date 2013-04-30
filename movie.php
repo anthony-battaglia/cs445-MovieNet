@@ -16,7 +16,10 @@
 <body>
 	<!-- Menu Horizontal -->
 	<ul class="menu">
-		<li><a href=""><i class="icon-user"></i> AnthonyB</a>
+		<?php
+		$uname = $_GET["uname"];
+		?>
+		<li><a href=""><i class="icon-user"></i> <?php echo $uname; ?></a>
 			<ul>
 				<li><a href=""><i class="icon-cog"></i> Settings</a></li>
 				<li class="divider"></li>
@@ -24,10 +27,9 @@
 			</ul>
 		</li>
 		<li class="divider"></li>
-		<li><a href="home.php"><i class="icon-home"></i> Home</a></li>
-		<li><a href="movies.php"><i class="icon-facetime-video"></i> Movies</a></li>
-		<li><a href="castmembers.php"><i class="icon-group"></i> Cast Members</a></li>
-		<li><a href="users.php"><i class="icon-thumbs-up"></i> Users</a></li>
+		<li><?php echo '<a href="movies.php?uname='.urlencode($uname).'"' ?>><i class="icon-facetime-video"></i> Movies</a></li>
+		<li><?php echo '<a href="castmembers.php?uname='.urlencode($uname).'"' ?>><i class="icon-group"></i> Cast Members</a></li>
+		<li><?php echo '<a href="userss.php?uname='.urlencode($uname).'"' ?>><i class="icon-thumbs-up"></i> Users</a></li>
 	</ul>
 
 	<div class="grid">
@@ -44,7 +46,7 @@
 
 				  	$title = $_GET["title"];
 				  	$year = $_GET["myear"];
-				  	$sql = 'SELECT a.aname AS aname, c.role AS role, m.myear AS myear, ds.dname as dname FROM Movies m, Cast_Members c, Actors a, Directors ds, Directed dd WHERE m.title=c.title AND m.myear=c.myear AND c.aid=a.aid AND ds.did=dd.did AND dd.title=m.title AND dd.myear=m.myear AND m.myear=' . $year .  ' AND m.title="' . urldecode($title) . '"' ;
+				  	$sql = 'SELECT a.aname AS aname, c.role AS role, m.myear AS myear, ds.dname as dname FROM Movies m, Cast_Members c, Actors a, Directors ds, Directed dd WHERE m.title=c.title AND m.myear=c.myear AND c.aid=a.aid AND ds.did=dd.did AND dd.title=m.title AND dd.myear=m.myear AND m.title="' . urldecode($title) . '"';
 				  	$result = mysql_query($sql);
 
 				  	$cast = array();
@@ -68,17 +70,17 @@
 						}
 						$imgsrc = (isset($theMovie)) ? $theMovie["posters"]["detailed"] : "/www/cs445_4_s13/imgs/poster_default.gif";
 					}
-					echo '<img title="' . $title . '" src="' . $imgsrc . '" />'
+					echo '<img title="' . $title . '" src="' . $imgsrc . '" />';
 				?>
 			</div>
 			<div class="col_7">
 				<div class="notice success clearfix" style="background: #ffffff; color: #000000; border-color: #8f8f8f;">
 				<h4><?php echo $_GET["title"] . " (" . $_GET["myear"] . ")"  ?></h4>
-				<em>Avg Rating: <strong><?php echo $avg["avg"] ?></strong> (<?php echo $avg["num_ratings"] ?>)  </em><a href="">Rate</a>
+				<em>Avg Rating: <strong><?php echo $avg["avg"] ?></strong> (<?php echo $avg["num_ratings"] ?>)  </em><a href=<?php echo "/php-wrapper/cs445_4_s13/ratings.php?title=" . urlencode($title) . "&myear=" . $_GET['myear'] ?>>Rate</a>
 				<p>
-					<em><?php echo (isset($theMovie["critics_consensus"])) ? $theMovie["critics_consensus"] : "No description found."; ?></em>
+					<em><?php echo (isset($theMovie)) ? $theMovie["critics_consensus"] : "No description found."; ?></em>
 				</p>
-				<span><strong>Director:</strong> <?php echo isset($cast[0]) ? '<a href="director.php?name=' . $cast[0]["dname"] . '"">' . $cast[0]["dname"] . '</a></span>' : "Unknown"; ?>
+				<span><strong>Director:</strong> <a href=""><?php echo $cast[0]["dname"] ?></a></span>
 				<?php
 				if(isset($theMovie)){
 					echo "<h6><small><strong>Starring: </strong>";
@@ -90,6 +92,7 @@
 				}
 					?></small></h6>
 				</div>
+				<a href=<?php echo "/php-wrapper/cs445_4_s13/movieReviews.php?title=" . urlencode($title) . "&myear=" . $_GET['myear'] ?>>View Reviews</a>
 			</div>
 			<div class="col_3">
 				<?php
@@ -117,7 +120,7 @@
 					<?php 
 						foreach($cast as $actor){
 							echo "<tr>";
-							echo '<td><a href="actor.php?name=' . urlencode($actor["aname"]) . '">' . $actor["aname"] . "</a></td>";
+							echo '<td><a href="">' . $actor["aname"] . "</a></td>";
 							echo "<td>" . $actor["role"] . "</td>";
 							echo "</tr>";
 						}
@@ -131,10 +134,5 @@
 	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 	<script type="text/javascript" src="/www/cs445_4_s13/js/kickstart.js"></script>    
 	<script type="text/javascript" src="/www/cs445_4_s13/js/bss.js"></script> 
-	<?php
-		if ($_SERVER['REQUEST_METHOD'] === 'POST' && $advertiser){
-			$update = mysql_query('UPDATE Advertisers A SET A.clicks=A.clicks+1 WHERE A.ccnum=' . $advertiser["ccnum"]);
-		}
-	?>
 </body>
 </html>

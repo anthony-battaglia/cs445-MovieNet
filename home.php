@@ -12,11 +12,11 @@
 <body>
 	<!-- Menu Horizontal -->
 	<ul class="menu">
-		<li><a href=""><i class="icon-user"></i> AnthonyB</a>
+		<li><a href=""><i class="icon-user"></i> <?php echo $_GET["uname"]; ?></a>
 			<ul>
 				<li><a href=""><i class="icon-cog"></i> Settings</a></li>
 				<li class="divider"></li>
-				<li><a href=""><i class="icon-remove-circle"></i> Sign Out</a></li>
+				<li><a href="login.php?flag='deletecookie'"><i class="icon-remove-circle"></i> Sign Out</a></li>
 			</ul>
 		</li>
 		<li class="divider"></li>

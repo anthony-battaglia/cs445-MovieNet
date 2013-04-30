@@ -12,17 +12,19 @@
 <body>
 	<!-- Menu Horizontal -->
 	<ul class="menu">
-		<li><a href=""><i class="icon-user"></i> AnthonyB</a>
+		<?php
+		$uname = $_GET["uname"];
+		?>
+		<li><a href=""><i class="icon-user"></i> <?php echo $uname; ?></a>
 			<ul>
 				<li><a href=""><i class="icon-cog"></i> Settings</a></li>
 				<li class="divider"></li>
-				<li><a href=""><i class="icon-remove-circle"></i> Sign Out</a></li>
+				<li><a href="login.php?flag='deletecookie'"><i class="icon-remove-circle"></i> Sign Out</a></li>
 			</ul>
 		</li>
 		<li class="divider"></li>
-		<li><a href="home.php"><i class="icon-home"></i> Home</a></li>
-		<li><a href="movies.php"><i class="icon-facetime-video"></i> Movies</a></li>
-		<li><a href="actors.php"><i class="icon-group"></i> Actors</a></li>
+		<li><?php echo '<a href="movies.php?uname='.urlencode($uname).'"' ?>><i class="icon-facetime-video"></i> Movies</a></li>
+		<li><?php echo '<a href="castmembers.php?uname='.urlencode($uname).'"' ?>><i class="icon-group"></i> Cast Members</a></li>
 		<li class="current"><a href=""><i class="icon-thumbs-up"></i> Users</a></li>
 	</ul>
 
