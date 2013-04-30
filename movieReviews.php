@@ -57,7 +57,7 @@ if (!isset($_COOKIE["email"])){
 
 				  	$title = $_GET["title"];
 				  	$year = $_GET["myear"];
-				  	$sql = 'SELECT a.aname AS aname, c.role AS role, m.myear AS myear, ds.dname as dname FROM Movies m, Cast_Members c, Actors a, Directors ds, Directed dd WHERE m.title=c.title AND m.myear=c.myear AND c.aid=a.aid AND ds.did=dd.did AND dd.title=m.title AND dd.myear=m.myear AND dd.myear=' . $year . ' AND m.title="' . urldecode($title) . '"';
+				  	$sql = 'SELECT a.aname AS aname, c.role AS role, m.myear AS myear, ds.dname as dname FROM Movies m, Cast_Members c, Actors a, Directors ds, Directed dd WHERE m.title=c.title AND m.myear=c.myear AND c.aid=a.aid AND ds.did=dd.did AND dd.title=m.title AND dd.myear=m.myear AND m.title="' . urldecode($title) . '"';
 				  	$result = mysql_query($sql);
 
 				  	$cast = array();
@@ -82,6 +82,14 @@ if (!isset($_COOKIE["email"])){
 						$imgsrc = (isset($theMovie)) ? $theMovie["posters"]["detailed"] : "/www/cs445_4_s13/imgs/poster_default.gif";
 					}
 					echo '<img title="' . $title . '" src="' . $imgsrc . '" />';
+
+					$sql = 'SELECT u.uname AS uname, r.rating AS rating, r.review AS review FROM Users u, Rated r WHERE u.email = r.email AND r.title="' . urldecode($title) . '" AND r.myear="' . $year . '" AND r.review IS NOT NULL';
+				  	$result = mysql_query($sql);
+
+				  	$reviews = array();
+				  	while ($row = mysql_fetch_assoc($result)){
+			  			$reviews[] = $row;
+					}
 				?>
 			</div>
 			<div class="col_7">
@@ -91,7 +99,7 @@ if (!isset($_COOKIE["email"])){
 				<p>
 					<em><?php echo (isset($theMovie)) ? $theMovie["critics_consensus"] : "No description found."; ?></em>
 				</p>
-				<span><strong>Director:</strong> <?php echo '<a href="director.php?name=' . $cast[0]["dname"] . '">' . $cast[0]["dname"] . '</a>';?></span>
+				<span><strong>Director:</strong> <a href=""><?php echo $cast[0]["dname"] ?></a></span>
 				<?php
 				if(isset($theMovie)){
 					echo "<h6><small><strong>Starring: </strong>";
@@ -121,18 +129,20 @@ if (!isset($_COOKIE["email"])){
 		</div>
 		<div class="col_12">
 			<div class="col_8">
-				<h5>Cast</h5>
+				<h5>Reviews</h5>
 				<table cellspacing="0" cellpadding="0">
 				<thead><tr>
-					<th>Actor</th>
-					<th>Role</th>
+					<th>User</th>
+					<th>Rating</th>
+					<th>Review</th>
 				</tr></thead>
 				<tbody>
 					<?php 
-						foreach($cast as $actor){
+						foreach($reviews as $review){
 							echo "<tr>";
-							echo '<td><a href="actor.php?name=' . $actor["aname"] . '">' . $actor["aname"] . "</a></td>";
-							echo "<td>" . $actor["role"] . "</td>";
+							echo '<td><a href="">' . $review["uname"] . "</a></td>";
+							echo '<td>' . $review["rating"] . '</td>';
+							echo "<td>" . $review["review"] . "</td>";
 							echo "</tr>";
 						}
 					?>

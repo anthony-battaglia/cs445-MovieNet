@@ -1,3 +1,8 @@
+<?php
+if (!isset($_COOKIE["email"])){
+	header("Location: login.php");
+}
+?>
 <!DOCTYPE html>
 <html>
 <head>
@@ -13,18 +18,26 @@
 <body>
 	<!-- Menu Horizontal -->
 	<ul class="menu">
-		<li><a href=""><i class="icon-user"></i> AnthonyB</a>
+		<?php
+			$uname = $_COOKIE["email"];
+		?>
+		<li><a href=""><i class="icon-user"></i> <?php echo $uname; ?></a>
 			<ul>
-				<li><a href=""><i class="icon-cog"></i> Settings</a></li>
-				<li class="divider"></li>
-				<li><a href=""><i class="icon-remove-circle"></i> Sign Out</a></li>
+				<li><a href="login.php?flag='deletecookie'"><i class="icon-remove-circle"></i> Sign Out</a></li>
 			</ul>
 		</li>
 		<li class="divider"></li>
-		<li><a href="home.php"><i class="icon-home"></i> Home</a></li>
-		<li class="current"><a href=""><i class="icon-facetime-video"></i> Movies</a></li>
-		<li><a href="castmembers.php"><i class="icon-group"></i> Cast Members</a></li>
-		<li><a href="users.php"><i class="icon-thumbs-up"></i> Users</a></li>
+		<li class="current"><a href="movies.php"><i class="icon-facetime-video"></i> Movies</a>
+			<ul>
+				<li><a href="popular.php"><i class="icon-comments"></i> Popular</a></li>
+			</ul>
+		</li>
+		<li><?php echo '<a href="castmembers.php">' ?><i class="icon-group"></i> Cast Members</a></li>
+		<li><?php echo '<a href="users.php">' ?><i class="icon-thumbs-up"></i> Users</a>
+			<ul>
+				<li><a href="yum.php"><i class="icon-food"></i> Good Taste</a></li>
+			</ul>
+		</li>
 	</ul>
 
 	<div class="grid">
@@ -57,20 +70,6 @@
 				<div class="col_3">
 					<label for="min_mratings">Minimum # of User Ratings <span>5000</span></label>
 					<input id="min_mratings" name="min_ratings" type="text" />
-					<label for="avg_rating">Average User Rating <span></span></label>
-					<select id="avg_rating" name="avg_rating">
-						<option value="">--</option>
-						<option value="1">1</option>
-						<option value="2">2</option>
-						<option value="3">3</option>
-						<option value="4">4</option>
-						<option value="5">5</option>
-						<option value="6">6</option>
-						<option value="7">7</option>
-						<option value="8">8</option>
-						<option value="9">9</option>
-						<option value="10">10</option>
-					</select>
 				</div>
 			</form>
 		</div>
@@ -172,7 +171,6 @@
 	  	}
 	  	if($keyCount > 0){
 	  		$sql = build_sql($select, $from, $where);
-	  		echo $sql;
 	  		$result = mysql_query($sql);
 		  	$data = array();
 			while ($row = mysql_fetch_assoc($result)){
@@ -191,10 +189,16 @@
 						echo "<td>--</td>";
 					}
 					else{
-						if(strcmp("Year", $attr) == 0 || strcmp("Runtime", $attr) == 0 || strcmp("MPAA", $attr) == 0 || strcmp("Role", $attr) == 0){
-							echo "<td>" . $value[$attr] . "</td>";
+						if(strcmp("Actor", $attr) == 0){
+							echo '<td><a href="/php-wrapper/cs445_4_s13/actor.php?name=' . $value[$attr] . '">' . $value[$attr] . "</a></td>";
 						}
-						else echo '<td><a href="/php-wrapper/cs445_4_s13/movie.php?title=' . $value["Title"] . '&myear=' . $value["Year"] . '">' . $value[$attr] . "</a></td>";
+						else if(strcmp("Director", $attr) == 0){
+							echo '<td><a href="/php-wrapper/cs445_4_s13/director.php?name=' . $value[$attr] . '">' . $value[$attr] . "</a></td>";
+						}
+						else if(strcmp("Title", $attr) == 0){
+							echo '<td><a href="/php-wrapper/cs445_4_s13/movie.php?title=' . $value[$attr] . '&myear=' . $value["Year"] . '">' . $value[$attr] . "</a></td>";
+						}
+						else echo '<td>' . $value[$attr] . '</td>';
 					}
 				}
 				echo "</tr>";
@@ -217,11 +221,14 @@
 				foreach($topMovies as $key => $movie){
 					$title = $movie["title"];
 					$year = $movie["myear"];
+					$avg = $movie["avg_rating"];
 					$rmovie = json_decode(file_get_contents("http://api.rottentomatoes.com/api/public/v1.0/movies.json?apikey=zmrwsazsgjur8vmd5qdafz8e&q=" . urlencode($title) . "&page_limit=1"), true);
 					$imgsrc = $rmovie["movies"][0]["posters"]["detailed"];
 					echo '<div class="col_2">';
 					echo '<a href="/php-wrapper/cs445_4_s13/movie.php?title=' . urlencode($title) . "&myear=" . $year .  '"> <img title="' . $title . '" src="' . $imgsrc . '" /></a>';
-					echo '<small>' . $title . '</small>';
+					echo '<small>' . $title . '</small><br>';
+					echo '<label><span> ' . $year . '</span></label><br>';
+					echo '<label><span> Avg. Rating: <strong>' . $avg . '</strong></span></label>';
 					echo '</div>';
 				}
 	  		?>

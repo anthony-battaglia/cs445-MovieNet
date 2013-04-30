@@ -1,3 +1,8 @@
+<?php
+if (!isset($_COOKIE["email"])){
+	header("Location: login.php");
+}
+?>
 <!DOCTYPE html>
 <html>
 <head>
@@ -9,24 +14,34 @@
 	<link rel="stylesheet" type="text/css" href="/www/cs445_4_s13/css/style.css" media="all" />
 	<link rel="stylesheet" type="text/css" href="/www/cs445_4_s13/css/bss.css" media="all" />
 	<link rel="stylesheet" type="text/css" href="/www/cs445_4_s13/bss2.css" media="all" />
+	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+	<script type="text/javascript" src="/www/cs445_4_s13/jquery-cookie/jquery.cookie.js"></script>
 	<script src="/www/cs445_4_s13/bss2.js"></script>
 	<style>img{border: 1px solid #8f8f8f;}</style>
 </head>
 <body>
 	<!-- Menu Horizontal -->
 	<ul class="menu">
-		<li><a href=""><i class="icon-user"></i> AnthonyB</a>
+		<?php
+			$uname = $_COOKIE["email"];
+		?>
+		<li><a href=""><i class="icon-user"></i> <?php echo $uname; ?></a>
 			<ul>
-				<li><a href=""><i class="icon-cog"></i> Settings</a></li>
-				<li class="divider"></li>
-				<li><a href=""><i class="icon-remove-circle"></i> Sign Out</a></li>
+				<li><a href="login.php?flag='deletecookie'"><i class="icon-remove-circle"></i> Sign Out</a></li>
 			</ul>
 		</li>
 		<li class="divider"></li>
-		<li><a href="home.php"><i class="icon-home"></i> Home</a></li>
-		<li><a href="movies.php"><i class="icon-facetime-video"></i> Movies</a></li>
-		<li><a href="castmembers.php"><i class="icon-group"></i> Cast Members</a></li>
-		<li><a href="users.php"><i class="icon-thumbs-up"></i> Users</a></li>
+		<li class="current"><a href="movies.php"><i class="icon-facetime-video"></i> Movies</a>
+			<ul>
+				<li><a href="popular.php"><i class="icon-comments"></i> Popular</a></li>
+			</ul>
+		</li>
+		<li><?php echo '<a href="castmembers.php">' ?><i class="icon-group"></i> Cast Members</a></li>
+		<li><?php echo '<a href="users.php">' ?><i class="icon-thumbs-up"></i> Users</a>
+			<ul>
+				<li><a href="yum.php"><i class="icon-food"></i> Good Taste</a></li>
+			</ul>
+		</li>
 	</ul>
 
 	<!-- START GRID -->
@@ -90,6 +105,7 @@
 				}
 					?></small></h6>
 				</div>
+				<a href=<?php echo "/php-wrapper/cs445_4_s13/movieReviews.php?title=" . urlencode($title) . "&myear=" . $_GET['myear'] ?>>View Reviews</a>
 			</div>
 			<div class="col_3">
 				<?php
@@ -107,7 +123,7 @@
 		</div>
 		<div class="col_12">
 			<div class="col_3">
-					<label for="user_rating">Rating (From 1 to 10) <span></span></label>
+					<label for="user_rating">Rating (From 1 to 10) <span></span></label><br/>
 					<select id="user_rating" name="user_rating">
 						<option value="">--</option>
 						<option value="1">1</option>
@@ -126,14 +142,25 @@
 		<div class="col_12">
 			<div class="col_9">
 				<!-- Reviex Box -->
-				<label for="user_review">Review <span></span></label>
+				<label for="user_review">Review <span id="counter"></span></label><br/>
 				<textarea id="user_review" placeholder="Enter you own movie review here"></textarea>
+				<div class="notice success" id="review_success" style="display: none;"><i class="icon-ok icon-large"></i> Rating Successful! 
+					<a href="#close" class="icon-remove"></a>
+				</div>
 			</div>
+		</div>
+		<div class="col_2">
+			<?php
+			echo '<button form="rating_submit" type="submit" class="blue" onclick="submitRating(' . '\'' . urldecode($title) . '\', \'' . $_GET["myear"] . '\')"><i class="icon-comment"</i>Submit</button>';
+			?>
 		</div>
 	</div>
 	<!-- END GRID -->
+	<div class="clear"></div>
+	<div id="footer">
+	&copy; UMass Amherst CS445 S13 Movie Database Class Project. This website was built with <a href="http://www.99lime.com">HTML KickStart</a>
+	</div>
 
-	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 	<script type="text/javascript" src="/www/cs445_4_s13/js/kickstart.js"></script>    
 	<script type="text/javascript" src="/www/cs445_4_s13/js/bss.js"></script> 
 </body>

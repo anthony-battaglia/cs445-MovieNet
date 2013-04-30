@@ -1,3 +1,8 @@
+<?php
+if (!isset($_COOKIE["email"])){
+	header("Location: login.php");
+}
+?>
 <!DOCTYPE html>
 <html>
 <head>
@@ -15,18 +20,26 @@
 <body>
 	<!-- Menu Horizontal -->
 	<ul class="menu">
-		<li><a href=""><i class="icon-user"></i> AnthonyB</a>
+		<?php
+			$uname = $_COOKIE["email"];
+		?>
+		<li><a href=""><i class="icon-user"></i> <?php echo $uname; ?></a>
 			<ul>
-				<li><a href=""><i class="icon-cog"></i> Settings</a></li>
-				<li class="divider"></li>
-				<li><a href=""><i class="icon-remove-circle"></i> Sign Out</a></li>
+				<li><a href="login.php?flag='deletecookie'"><i class="icon-remove-circle"></i> Sign Out</a></li>
 			</ul>
 		</li>
 		<li class="divider"></li>
-		<li><a href="home.php"><i class="icon-home"></i> Home</a></li>
-		<li><a href="movies.php"><i class="icon-facetime-video"></i> Movies</a></li>
-		<li><a href="castmembers.php"><i class="icon-group"></i> Cast Members</a></li>
-		<li><a href="users.php"><i class="icon-thumbs-up"></i> Users</a></li>
+		<li><a href="movies.php"><i class="icon-facetime-video"></i> Movies</a>
+			<ul>
+				<li><a href="popular.php"><i class="icon-comments"></i> Popular</a></li>
+			</ul>
+		</li>
+		<li class="current"><?php echo '<a href="castmembers.php">' ?><i class="icon-group"></i> Cast Members</a></li>
+		<li><?php echo '<a href="users.php">' ?><i class="icon-thumbs-up"></i> Users</a>
+			<ul>
+				<li><a href="yum.php"><i class="icon-food"></i> Good Taste</a></li>
+			</ul>
+		</li>
 	</ul>
 
 	<div class="grid">
@@ -100,6 +113,10 @@
 				</table>
 			</div>
 		</div>
+	</div>
+	<div class="clear"></div>
+	<div id="footer">
+	&copy; UMass Amherst CS445 S13 Movie Database Class Project. This website was built with <a href="http://www.99lime.com">HTML KickStart</a>
 	</div>
 
 	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
