@@ -62,6 +62,7 @@
 			<input id="password" name="password" type="password" placeholder="Password" />
 			<input type="Submit" value="Submit" /> 
 		</form>
+		<h6>New to MovieNet? <a href="register.php">Register here.</a>
 	</div>
 
 	<div class="clear"></div>
