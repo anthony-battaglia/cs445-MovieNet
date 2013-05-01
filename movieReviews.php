@@ -41,6 +41,12 @@ if (!isset($_COOKIE["email"])){
 				<li><a href="yum.php"><i class="icon-food"></i> Good Taste</a></li>
 			</ul>
 		</li>
+		<?php
+		if($uname == "admin@movienet.com"){
+			$admin = '<li><a href="admin.php"><i class="icon-wrench"></i> Admin</a>';
+			echo $admin;
+		}
+		?>
 	</ul>
 
 	<div class="grid">
@@ -83,7 +89,7 @@ if (!isset($_COOKIE["email"])){
 					}
 					echo '<img title="' . $title . '" src="' . $imgsrc . '" />';
 
-					$sql = 'SELECT u.uname AS uname, r.rating AS rating, r.review AS review FROM Users u, Rated r WHERE u.email = r.email AND r.title="' . urldecode($title) . '" AND r.myear="' . $year . '" AND r.review IS NOT NULL';
+					$sql = 'SELECT u.uname AS uname, r.rating AS rating, r.review AS review, u.email AS email FROM Users u, Rated r WHERE u.email = r.email AND r.title="' . urldecode($title) . '" AND r.myear="' . $year . '" AND r.review IS NOT NULL';
 				  	$result = mysql_query($sql);
 
 				  	$reviews = array();
@@ -112,6 +118,12 @@ if (!isset($_COOKIE["email"])){
 					?></small></h6>
 				</div>
 				<a href=<?php echo "/php-wrapper/cs445_4_s13/movieReviews.php?title=" . urlencode($title) . "&myear=" . $_GET['myear'] ?>>View Reviews</a>
+				<button form="favorite" type="submit" class="blue" onclick='favorite(<?php echo '"' . $_GET['title'] . '", ' . $_GET['myear'] ?>)'>
+					<i class="icon-star"></i>Favorite</button>
+				</button>
+				<button form="watchList" type="submit" class="blue" onclick='watchList(<?php echo '"' . $_GET['title'] . '", ' . $_GET['myear'] ?>)'>
+					<i class="icon-bookmark"></i>Watch List</button>
+				</button>
 			</div>
 			<div class="col_3">
 				<?php
@@ -140,7 +152,7 @@ if (!isset($_COOKIE["email"])){
 					<?php 
 						foreach($reviews as $review){
 							echo "<tr>";
-							echo '<td><a href="">' . $review["uname"] . "</a></td>";
+							echo '<td><a href="user.php?email=' . $review["email"] . '">' . $review["uname"] . "</a></td>";
 							echo '<td>' . $review["rating"] . '</td>';
 							echo "<td>" . $review["review"] . "</td>";
 							echo "</tr>";
@@ -156,6 +168,7 @@ if (!isset($_COOKIE["email"])){
 	<div id="footer">
 	&copy; UMass Amherst CS445 S13 Movie Database Class Project. This website was built with <a href="http://www.99lime.com">HTML KickStart</a>
 	</div>
+
 	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 	<script type="text/javascript" src="/www/cs445_4_s13/js/kickstart.js"></script>    
 	<script type="text/javascript" src="/www/cs445_4_s13/js/bss.js"></script> 

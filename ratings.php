@@ -42,6 +42,12 @@ if (!isset($_COOKIE["email"])){
 				<li><a href="yum.php"><i class="icon-food"></i> Good Taste</a></li>
 			</ul>
 		</li>
+		<?php
+		if($uname == "admin@movienet.com"){
+			$admin = '<li><a href="admin.php"><i class="icon-wrench"></i> Admin</a>';
+			echo $admin;
+		}
+		?>
 	</ul>
 
 	<!-- START GRID -->
@@ -106,6 +112,12 @@ if (!isset($_COOKIE["email"])){
 					?></small></h6>
 				</div>
 				<a href=<?php echo "/php-wrapper/cs445_4_s13/movieReviews.php?title=" . urlencode($title) . "&myear=" . $_GET['myear'] ?>>View Reviews</a>
+				<button form="favorite" type="submit" class="blue" onclick='favorite(<?php echo '"' . $_GET['title'] . '", ' . $_GET['myear'] ?>)'>
+					<i class="icon-star"></i>Favorite</button>
+				</button>
+				<button form="watchList" type="submit" class="blue" onclick='watchList(<?php echo '"' . $_GET['title'] . '", ' . $_GET['myear'] ?>)'>
+					<i class="icon-bookmark"></i>Watch List</button>
+				</button>
 			</div>
 			<div class="col_3">
 				<?php
@@ -151,7 +163,7 @@ if (!isset($_COOKIE["email"])){
 		</div>
 		<div class="col_2">
 			<?php
-			echo '<button form="rating_submit" type="submit" class="blue" onclick="submitRating(' . '\'' . urldecode($title) . '\', \'' . $_GET["myear"] . '\')"><i class="icon-comment"</i>Submit</button>';
+			echo '<button form="rating_submit" type="submit" class="blue" onclick="submitRating(' . '\'' . urldecode($title) . '\', \'' . $_GET["myear"] . '\')"><i class="icon-comment"></i>Submit</button>';
 			?>
 		</div>
 	</div>

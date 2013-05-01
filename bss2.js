@@ -30,5 +30,34 @@ function submitRating (title, myear){
 function ratingCallback (response){
 	$("#user_rating").val("--");
 	$("#user_review").val("");
-	alert(response);
+	console.log(response);
+	// alert(response);
+};
+
+function favorite (title, myear){
+	var email = $.cookie('email');
+	var postData = { title : title, myear : myear, email : email};
+
+	$.ajax({
+			type : 'POST',
+			url  : 'favorite.php',
+			data : postData,
+			dataType : 'json'
+		}).done(favoriteCB);
+};
+
+function watchList (title, myear){
+	var email = $.cookie('email');
+	var postData = { title : title, myear : myear, email : email};
+
+	$.ajax({
+			type : 'POST',
+			url  : 'watch_list.php',
+			data : postData,
+			dataType : 'json'
+		}).done(favoriteCB);
+};
+
+function favoriteCB (response){
+	console.log(response);
 };

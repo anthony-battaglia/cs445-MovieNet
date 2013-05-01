@@ -38,6 +38,12 @@ if (!isset($_COOKIE["email"])){
 				<li><a href="yum.php"><i class="icon-food"></i> Good Taste</a></li>
 			</ul>
 		</li>
+		<?php
+		if($uname == "admin@movienet.com"){
+			$admin = '<li><a href="admin.php"><i class="icon-wrench"></i> Admin</a>';
+			echo $admin;
+		}
+		?>
 	</ul>
 
 	<div class="grid">
@@ -135,7 +141,7 @@ if (!isset($_COOKIE["email"])){
 
 		  	$keys = array_keys($_GET);
 		  	if(in_array("aname", $keys)){
-		  		array_push($select, 'a.aname AS "Actor Name');
+		  		array_push($select, 'a.aname AS "Actor Name"');
 		  		array_push($from, "Actors a");
 		  	}
 		  	if(in_array("role", $keys)){

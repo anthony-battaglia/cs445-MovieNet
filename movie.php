@@ -14,6 +14,8 @@ if (!isset($_COOKIE["email"])){
 	<link rel="stylesheet" type="text/css" href="/www/cs445_4_s13/css/style.css" media="all" />
 	<link rel="stylesheet" type="text/css" href="/www/cs445_4_s13/css/bss.css" media="all" />
 	<link rel="stylesheet" type="text/css" href="/www/cs445_4_s13/bss2.css" media="all" />
+	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+	<script type="text/javascript" src="/www/cs445_4_s13/jquery-cookie/jquery.cookie.js"></script>
 	<script src="/www/cs445_4_s13/bss2.js"></script>
 	<style>img{border: 1px solid #8f8f8f;}</style>
 </head>
@@ -41,6 +43,12 @@ if (!isset($_COOKIE["email"])){
 				<li><a href="yum.php"><i class="icon-food"></i> Good Taste</a></li>
 			</ul>
 		</li>
+		<?php
+		if($uname == "admin@movienet.com"){
+			$admin = '<li><a href="admin.php"><i class="icon-wrench"></i> Admin</a>';
+			echo $admin;
+		}
+		?>
 	</ul>
 
 	<div class="grid">
@@ -104,6 +112,12 @@ if (!isset($_COOKIE["email"])){
 					?></small></h6>
 				</div>
 				<a href=<?php echo "/php-wrapper/cs445_4_s13/movieReviews.php?title=" . urlencode($title) . "&myear=" . $_GET['myear'] ?>>View Reviews</a>
+				<button form="favorite" type="submit" class="blue" onclick='favorite(<?php echo '"' . $_GET['title'] . '", ' . $_GET['myear'] ?>)'>
+					<i class="icon-star"></i>Favorite</button>
+				</button>
+				<button form="watchList" type="submit" class="blue" onclick='watchList(<?php echo '"' . $_GET['title'] . '", ' . $_GET['myear'] ?>)'>
+					<i class="icon-bookmark"></i>Watch List</button>
+				</button>
 			</div>
 			<div class="col_3">
 				<?php
@@ -147,7 +161,6 @@ if (!isset($_COOKIE["email"])){
 	&copy; UMass Amherst CS445 S13 Movie Database Class Project. This website was built with <a href="http://www.99lime.com">HTML KickStart</a>
 	</div>
 
-	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 	<script type="text/javascript" src="/www/cs445_4_s13/js/kickstart.js"></script>    
 	<script type="text/javascript" src="/www/cs445_4_s13/js/bss.js"></script> 
 </body>

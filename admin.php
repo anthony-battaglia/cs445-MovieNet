@@ -39,6 +39,12 @@ if (!isset($_COOKIE["email"])){
 				<li><a href="yum.php"><i class="icon-food"></i> Good Taste</a></li>
 			</ul>
 		</li>
+		<?php
+		if($uname == "admin@movienet.com"){
+			$admin = '<li><a href="admin.php"><i class="icon-wrench"></i> Admin</a>';
+			echo $admin;
+		}
+		?>
 	</ul>
 
 	<div class="grid">
